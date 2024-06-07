@@ -45,4 +45,8 @@ function isHabitablePlanet(planet) {
   );
 }
 
-export { habitablePlanets, loadPlanetsData };
+function getPlanets() {
+  return habitablePlanets;
+}
+
+export { getPlanets, loadPlanetsData };
