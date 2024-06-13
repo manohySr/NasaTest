@@ -1,16 +1,10 @@
-import { createReadStream } from "fs";
-import path from "path";
-import { parse } from "csv-parse";
+const { createReadStream } = require("fs");
+const path = require("path");
+const { parse } = require("csv-parse");
 
 const habitablePlanets = [];
 
-const pathToDB = path.join(
-  import.meta.dirname,
-  "..",
-  "..",
-  "data",
-  "kepler_data.csv"
-);
+const pathToDB = path.join(__dirname, "..", "..", "data", "kepler_data.csv");
 
 function loadPlanetsData() {
   return new Promise((resolve, reject) => {
@@ -49,4 +43,4 @@ function getPlanets() {
   return habitablePlanets;
 }
 
-export { getPlanets, loadPlanetsData };
+module.exports = { getPlanets, loadPlanetsData };

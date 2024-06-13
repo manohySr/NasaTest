@@ -1,8 +1,8 @@
-import {
+const {
   abordedLunchById,
   addNewLaunch,
   getAllLaunches,
-} from "../../models/launches.model.js";
+} = require("../../models/launches.model.js");
 
 function httpGetLaunches(req, res) {
   res.status(200).json(getAllLaunches());
@@ -42,4 +42,4 @@ function httpDeleteLaunch(req, res) {
   return res.status(200).json(aborded);
 }
 
-export { httpGetLaunches, httpPostLaunch, httpDeleteLaunch };
+module.exports = { httpGetLaunches, httpPostLaunch, httpDeleteLaunch };

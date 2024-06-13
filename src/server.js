@@ -1,6 +1,6 @@
-import { createServer } from "http";
-import app from "./app.js";
-import { loadPlanetsData } from "./models/planets.model.js";
+const { createServer } = require('http');
+const app = require('./app.js');
+const { loadPlanetsData } = require('./models/planets.model.js');
 
 const PORT = process.env.PORT || 8000;
 

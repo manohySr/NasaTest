@@ -1,13 +1,13 @@
-import { Router } from "express";
-import {
+const { Router } = require("express");
+const {
   httpDeleteLaunch,
   httpGetLaunches,
   httpPostLaunch,
-} from "./launches.controller.js";
+} = require("./launches.controller.js");
 
 const launchesRouter = Router();
 launchesRouter.get("/", httpGetLaunches);
 launchesRouter.post("/", httpPostLaunch);
 launchesRouter.delete("/:id", httpDeleteLaunch);
 
-export { launchesRouter };
+module.exports = { launchesRouter };
