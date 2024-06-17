@@ -5,7 +5,11 @@ const {
 } = require("../../models/launches.model.js");
 
 function httpGetLaunches(req, res) {
-  res.status(200).json(getAllLaunches());
+  const data = getAllLaunches();
+  res.status(200).json({
+    ok: true,
+    data,
+  });
 }
 
 function httpPostLaunch(req, res) {
@@ -33,7 +37,10 @@ function httpPostLaunch(req, res) {
   }
 
   addNewLaunch(launch);
-  return res.status(201).json(launch);
+  return res.status(201).json({
+    ok: true,
+    data: launch,
+  });
 }
 
 function httpDeleteLaunch(req, res) {

@@ -1,7 +1,12 @@
 const { getPlanets } = require("./../../models/planets.model.js");
 
 function httpGetPlanets(req, res) {
-  return res.json(getPlanets());
+  const data = getPlanets()
+  res.statusCode = 200;
+  return res.json({
+    ok: true,
+    data
+  });
 }
 
 module.exports = { httpGetPlanets };

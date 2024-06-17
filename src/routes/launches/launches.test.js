@@ -33,9 +33,9 @@ describe("Test POST /launch", () => {
       .expect("Content-Type", /json/)
       .expect(201);
     const requestLaunchDate = new Date(completeDataLaunch.launchDate).valueOf();
-    const responseLaunchDate = new Date(response.body.launchDate).valueOf();
+    const responseLaunchDate = new Date(response.body.data.launchDate).valueOf();
     expect(responseLaunchDate).toBe(requestLaunchDate);
-    expect(response.body).toMatchObject(dataLaunchWithoutDate);
+    expect(response.body.data).toMatchObject(dataLaunchWithoutDate);
   });
   test("It should catch missing error", async () => {
     const response = await request(app)
