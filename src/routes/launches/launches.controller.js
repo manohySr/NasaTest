@@ -2,7 +2,7 @@ const {
   abordedLunchById,
   addNewLaunch,
   getAllLaunches,
-} = require("../../models/launches.model.js");
+} = require("../../models/launches/launches.model.js");
 
 function httpGetLaunches(req, res) {
   const data = getAllLaunches();
