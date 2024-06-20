@@ -22,11 +22,12 @@ To install and set up the project, follow these steps:
 
 3. Install the dependencies:
     ```bash
-    npm install
+    npm install -g pnpm
+    pnpm install
     ```
 
 ## Usage
 
 To start the application, run:
 ```bash
-npm run dev
+pnpm run dev
