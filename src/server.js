@@ -1,10 +1,11 @@
 const { createServer } = require("http");
+require("dotenv").config();
 const mongoose = require("mongoose");
 const app = require("./app.js");
 const { loadPlanetsData } = require("./models/planets/planets.model.js");
 
 const PORT = process.env.PORT || 8000;
-const MONGO_URL = `mongodb+srv://Manohy:n8ZEQLah5-2jg2s@cluster0.ywtcljw.mongodb.net/nasa?retryWrites=true&w=majority&appName=Cluster0`;
+const MONGO_URL = process.env.MONGO_URL;
 
 const clientOptions = {
   serverApi: { version: "1", strict: true, deprecationErrors: true },

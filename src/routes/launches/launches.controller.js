@@ -1,18 +1,19 @@
 const {
   abordedLunchById,
-  addNewLaunch,
+  scheduleNewLaunch,
   getAllLaunches,
+  isLaunchIdExist,
 } = require("../../models/launches/launches.model.js");
 
-function httpGetLaunches(req, res) {
-  const data = getAllLaunches();
+async function httpGetLaunches(req, res) {
+  const data = await getAllLaunches();
   res.status(200).json({
     ok: true,
     data,
   });
 }
 
-function httpPostLaunch(req, res) {
+async function httpPostLaunch(req, res) {
   const launch = req.body;
 
   if (
@@ -35,18 +36,31 @@ function httpPostLaunch(req, res) {
       error: "date format error",
     });
   }
-
-  addNewLaunch(launch);
+  const newLaunchSchedulted = await scheduleNewLaunch(launch);
   return res.status(201).json({
     ok: true,
-    data: launch,
+    data: newLaunchSchedulted,
   });
 }
 
-function httpDeleteLaunch(req, res) {
+async function httpDeleteLaunch(req, res) {
   const launchId = Number(req.params.id);
-  const aborded = abordedLunchById(launchId);
-  return res.status(200).json(aborded);
+  const isExist = await isLaunchIdExist(launchId);
+  if (!isExist) {
+    return res.status(404).json({
+      ok: false,
+      error: "Error: launch not found",
+    });
+  }
+
+  const aborded = await abordedLunchById(launchId);
+  if (!aborded) {
+    return res.status(400).json({
+      ok: false,
+      error: "Error: launch not found",
+    });
+  }
+  return res.status(200).json({ ok: true });
 }
 
 module.exports = { httpGetLaunches, httpPostLaunch, httpDeleteLaunch };

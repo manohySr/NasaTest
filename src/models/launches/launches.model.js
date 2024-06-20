@@ -1,8 +1,11 @@
-const launches = new Map();
-let lastLaunchFlighNumber = 100;
+const launchDbCollection = require("./launches.mongo");
+const planet = require("./../planets/planets.mongo");
+
+let DEFAULT_FLIGHT_NUMBER = 0;
+
 const launch = {
-  flighNumber: lastLaunchFlighNumber,
-  mission: "Kepler Exploration X",
+  flightNumber: 1,
+  mission: "From Madagascar to the stars",
   rocket: "Explorer IS1",
   launchDate: new Date("December 27, 2023"),
   target: "Kepler-442 b",
@@ -11,29 +14,79 @@ const launch = {
   success: true,
 };
 
-function getAllLaunches() {
-  return Array.from(launches.values());
+saveLaunch(launch);
+
+async function getAllLaunches() {
+  return await launchDbCollection.find({}, { _id: 0, __v: 0 });
 }
 
-launches.set(launch.flighNumber, launch);
+async function saveLaunch(launch) {
+  try {
+    const target = await planet.findOne({ keplerName: launch.target });
 
-function addNewLaunch(launch) {
-  launches.set(
-    lastLaunchFlighNumber++,
-    Object.assign(launch, {
-      flighNumber: lastLaunchFlighNumber,
-      customers: ["NASA"],
-      upcoming: true,
-      success: true,
-    })
+    if (!target) {
+      throw new Error("Error: the targeted planet doesn't exist");
+    }
+
+    return await launchDbCollection.findOneAndUpdate(
+      {
+        flightNumber: launch.flightNumber,
+      },
+      launch,
+      {
+        upsert: true,
+        returnDocument: "after",
+        projection: {
+          _id: 0,
+          __v: 0,
+        },
+      }
+    );
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+async function getLastLaunchFlightNumber() {
+  const latestLaunch = await launchDbCollection.findOne().sort("-flightNumber");
+  if (!latestLaunch) return DEFAULT_FLIGHT_NUMBER;
+  return latestLaunch.flightNumber;
+}
+
+async function scheduleNewLaunch(launch) {
+  const newFlightNumber = (await getLastLaunchFlightNumber()) + 1;
+  const newLaunch = Object.assign(launch, {
+    flightNumber: newFlightNumber,
+    customers: ["NASA"],
+    upcoming: true,
+    success: true,
+  });
+  return await saveLaunch(newLaunch);
+}
+
+async function isLaunchIdExist(launchId) {
+  const isExist = await launchDbCollection.findOne({
+    flightNumber: launchId,
+  });
+  return isExist ? true : false;
+}
+
+async function abordedLunchById(launchId) {
+  const abordedLaunch = await launchDbCollection.updateOne(
+    {
+      flightNumber: launchId,
+    },
+    {
+      upcoming: false,
+      success: false,
+    }
   );
+  return abordedLaunch.modifiedCount === 1;
 }
 
-function abordedLunchById(launchId) {
-  const launch = launches.get(launchId);
-  launch.upcoming = false;
-  launch.success = false;
-  return launch;
-}
-
-module.exports = { getAllLaunches, addNewLaunch, abordedLunchById };
+module.exports = {
+  getAllLaunches,
+  scheduleNewLaunch,
+  abordedLunchById,
+  isLaunchIdExist,
+};
