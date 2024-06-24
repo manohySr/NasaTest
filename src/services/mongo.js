@@ -1,10 +1,13 @@
+require("dotenv").config();
+
 const mongoose = require("mongoose");
 
-const MONGO_URL = process.env.MONGO_URL;
+const MONGO_URL = String(process.env.MONGO_URL);
 
 const clientOptions = {
   serverApi: { version: "1", strict: true, deprecationErrors: true },
 };
+
 async function mongoConnect() {
   try {
     // Create a Mongoose client with a MongoClientOptions object to set the Stable API version
