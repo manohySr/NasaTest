@@ -2,6 +2,7 @@ const {
   abordedLunchById,
   scheduleNewLaunch,
   getAllLaunches,
+  loadLaunchesData,
   isLaunchIdExist,
 } = require("../../models/launches/launches.model.js");
 
