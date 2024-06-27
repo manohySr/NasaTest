@@ -5,9 +5,11 @@ const {
   loadLaunchesData,
   isLaunchIdExist,
 } = require("../../models/launches/launches.model.js");
+const { getPagination } = require("../../services/query.js");
 
 async function httpGetLaunches(req, res) {
-  const data = await getAllLaunches();
+  const { skip, limit } = getPagination(req.query);
+  const data = await getAllLaunches(skip, limit);
   res.status(200).json({
     ok: true,
     data,
