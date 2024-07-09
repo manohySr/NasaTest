@@ -8,11 +8,14 @@ on:
 
 jobs:
   build:
-    env: 
+    env:
       CI: true
-    strategy: 
-      matrix: 
+      MONGO_URL: mongodb://localhost/nasa
+    strategy:
+      matrix:
         node-version: [22.x]
+        mongodb-version: ["7.0"]
+
     runs-on: ubuntu-latest
 
     steps:
@@ -22,6 +25,11 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: ${{matrix.node-version}}
+
+      - name: use MongoDB Action
+        uses: SusanDoggie/mongodb-action@0.0.1
+        with:
+          mongodb-version: ${{matrix.mongodb-version}}
 
       - name: Install pnpm
         run: npm install -g pnpm
