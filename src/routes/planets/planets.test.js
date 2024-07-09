@@ -14,7 +14,7 @@ describe("PLANETS API", () => {
 
   describe("Test GET /planet", () => {
     test("It should response 200 success", async () => {
-      await request(app).get("/planet").expect(200);
+      await request(app).get("/v1/planet").expect(200);
     });
   });
 });

@@ -6,7 +6,6 @@ const request = require("supertest");
 describe("LAUNCHES API", () => {
   beforeAll(async () => {
     await mongoConnect();
-    await loadLaunchesData();
   });
   afterAll(async () => {
     await mongoDisconnect();
@@ -14,7 +13,7 @@ describe("LAUNCHES API", () => {
 
   describe("Test GET /lauch", () => {
     test("It should response 200 success", async () => {
-      await request(app).get("/launch").expect(200);
+      await request(app).get("/v1/launch").expect(200);
     });
   });
 
@@ -39,7 +38,7 @@ describe("LAUNCHES API", () => {
 
     test("It should response 201 success", async () => {
       const response = await request(app)
-        .post("/launch")
+        .post("/v1/launch")
         .send(completeDataLaunch)
         .expect("Content-Type", /json/)
         .expect(201);
@@ -54,7 +53,7 @@ describe("LAUNCHES API", () => {
     });
     test("It should catch missing error", async () => {
       const response = await request(app)
-        .post("/launch")
+        .post("/v1/launch")
         .send(dataLaunchWithoutDate)
         .expect("Content-Type", /json/)
         .expect(400);
@@ -67,7 +66,7 @@ describe("LAUNCHES API", () => {
 
     test("It should catch invalid date error", async () => {
       const response = await request(app)
-        .post("/launch")
+        .post("/v1/launch")
         .send(dataLaunchInvalidDate)
         .expect("Content-Type", /json/)
         .expect(400);
