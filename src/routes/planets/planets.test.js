@@ -1,18 +1,16 @@
-const { loadPlanetsData } = require("../../models/planets/planets.model.js");
 const { mongoConnect, mongoDisconnect } = require("../../services/mongo.js");
 const app = require("./../../app.js");
 const request = require("supertest");
 
-describe("PLANETS API", () => {
-  beforeAll(async () => {
-    await mongoConnect();
-    await loadPlanetsData();
-  });
-  afterAll(async () => {
-    await mongoDisconnect();
-  });
+beforeAll(async () => {
+  await mongoConnect();
+});
+afterAll(async () => {
+  await mongoDisconnect();
+});
 
-  describe("Test GET /planet", () => {
+describe("PLANETS API", () => {
+  describe("Test GET /v1/planet", () => {
     test("It should response 200 success", async () => {
       await request(app).get("/v1/planet").expect(200);
     });
